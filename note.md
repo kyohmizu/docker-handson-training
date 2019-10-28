@@ -45,6 +45,7 @@
   - `docker container start`
   - `docker container ls`
   - `docker container exec`
+  - `docker container inspect`
   - `docker login`
   - `docker image push`
   - `docker image rm`
