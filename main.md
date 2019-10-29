@@ -40,13 +40,47 @@ exclude: true
 1. コンテナの基本
 1. Docker概要
 1. ハンズオン
-   1. Dockerコマンド
+   1. Dockerの基本操作
    2. Dockerfile
    3. 管理ツール
 
 ---
 class: center, middle, blue
 ## 事前準備
+
+---
+### 実行環境
+
+.zoom2[
+Docker CEをインストールしたマシンが必要です
+
+```bash
+$ sudo docker version
+```
+
+サポートOS  
+<u><https://docs.docker.com/install/#supported-platforms/></u>
+
+
+Azure仮想マシン(Ubuntu)でDockerを始めるには、以下を参考にしてください  
+<u><https://qiita.com/kyohmizu/items/7bc0bec96cc4664473eb></u>
+]
+
+---
+### ツール等
+
+.tmp[
+- git
+  - サンプルコードのインストールに便利  
+    <u><https://git-scm.com/></u>
+]
+.tmp[
+- ssh  
+  - 仮想マシンに接続する場合は必須
+  - Git Bashも可
+]
+- Docker Hubのアカウント作成  
+  <u><https://hub.docker.com/></u>
 
 ---
 class: center, middle, blue
@@ -179,7 +213,7 @@ class: center, middle, blue
 
 ---
 class: center, middle, blue
-## Dockerコマンド
+## Dockerの基本操作
 
 ---
 ### CLIツール
@@ -198,10 +232,7 @@ $ sudo docker [サブコマンド] [オプション] [ターゲット]
   etc...
 
 ---
-### docker image pull
-
-イメージをレジストリから取得  
-※デフォルトのレジストリはDocker Hub
+### イメージをレジストリから取得
 
 ```bash
 $ sudo docker image pull hello-world
@@ -213,10 +244,11 @@ Status: Downloaded newer image for hello-world:latest
 docker.io/library/hello-world:latest
 ```
 
----
-### docker image ls
+- デフォルトのレジストリはDocker Hub
+- タグを指定する場合は イメージ名:タグ名
 
-ホストに存在するイメージの一覧を取得
+---
+### イメージの一覧を取得
 
 ```bash
 $ sudo docker image ls
@@ -226,11 +258,12 @@ hello-world                                       latest
           fce289e99eb9        10 months ago       1.84kB
 ```
 
+- リポジトリとタグで一意に表される
+
 ---
-### docker container run
+### コンテナを作成＆実行
 
-イメージからコンテナを作成＆実行
-
+.zoom2[
 ```bash
 $ sudo docker container run hello-world
 
@@ -241,98 +274,249 @@ be working correctly.
 (以下略)
 ```
 
+- 以下2つのコマンドと同じ
+  - docker container create
+  - docker container start
 - 実行結果が出力され、コンテナは終了する
+]
 
 ---
-### docker container ls
-
-コンテナの一覧を取得
+### コンテナを作成＆実行
 
 .zoom2[
 ```bash
+$ sudo docker container run -it ubuntu:18.04
+Unable to find image 'ubuntu:18.04' locally
+18.04: Pulling from library/ubuntu
+
+(途中略)
+
+Status: Downloaded newer image for ubuntu:18.04
+root@7bc89a31691b:/
+```
+
+- ローカルにイメージがない場合、最初にイメージを取得
+- -it：インタラクティブなコンテナを作成
+  - 実行プロセスは /bin/bash
+- exit でコンテナを終了
+]
+
+---
+### コンテナを作成＆実行
+
+.zoom2[
+```bash
+$ sudo docker container run -it -d -p 8092:80 \
+dockercloud/hello-world
+d11972fbee5201b13a03cf296f1ee0e58a5371a178083b69c913d6177365...
+```
+
+- -d：バックグラウンドでコンテナを実行
+  - コンテナIDが出力される
+- -p：コンテナ内とホストのポートフォワード
+  - ブラウザでアクセスしてみる  
+  http://[ホストのIPアドレス]:8092
+]
+
+---
+### コンテナを作成＆実行
+
+<center><img src="hello-world.png" width=100%></center>
+
+---
+### コンテナの一覧を取得
+
+.zoom1[
+```bash
+$ sudo docker container ls
+CONTAINER ID     IMAGE                     COMMAND                CREATED    
+STATUS              PORTS                  NAMES
+d11972fbee52     dockercloud/hello-world   "/bin/sh -c /run.sh"   22 minutesago
+Up 29 minutes       0.0.0.0:8092->80/tcp   heuristic_hellman
+
 $ sudo docker container ls -a
-CONTAINER ID      IMAGE            COMMAND       CREATED      
-    STATUS                     PORTS               NAMES
-866926f90fec      hello-world      "/hello"      3 minutes ago
-    Exited (0) 3 minutes ago                       nice_leakey
+CONTAINER ID     IMAGE                     COMMAND                CREATED   
+STATUS                      PORTS                  NAMES
+866926f90fec     hello-world               "/hello"               3 minutes ago
+Exited (0) 50 minutes ago                          nice_leakey
+d11972fbee52     dockercloud/hello-world   "/bin/sh -c /run.sh"   23 minutesago
+Up 23 minutes               0.0.0.0:8092->80/tcp   heuristic_hellman
+7bc89a31691b     ubuntu:18.04              "/bin/bash"            42 minutesago
+Exited (0) 32 minutes ago                          pedantic_hopper
 ```
 ]
 
+.zoom2[
 - オプションなしの場合は、実行中のコンテナのみ取得
 - -a をつけることで全てのコンテナを取得できる
-
----
-### docker container rm
-
-指定したコンテナを削除
-
-.zoom2[
-```bash
-$ sudo docker container rm nice_leakey
-nice_leakey
-```
 ]
 
-- コンテナIDまたはコンテナ名で指定する
-- hello-worldコンテナをすべて削除したい場合は、以下のように指定
+---
+### コンテナを削除
 
 .zoom2[
 ```bash
+$ sudo docker container rm 866926f90fec
+866926f90fec
+
+// hello-worldイメージのコンテナをすべて削除
 $ sudo docker container ls -a | grep hello-world | \
 cut -d ' ' -f1 | sudo xargs docker container rm
 ```
+
+- コンテナIDまたはコンテナ名を指定して削除
+- 以下のコマンドで確認
+
+```bash
+$ sudo docker container ls -a
+```
 ]
 
 ---
-### 
+### イメージを削除
 
+.zoom2[
 ```bash
-
+$ sudo docker image rm hello-world
+Untagged: hello-world:latest
+Untagged: hello-world@sha256:c3b4ada4687bbaa170745b3e4dd8ac3...
+Deleted: sha256:fce289e99eb9bca977dae136fbe2a82b6b7d4c372474...
+Deleted: sha256:af0b15c8625bb1938f1d7b17081031f649fd14e6b233...
 ```
 
----
-### 
+- ローカルに取得したイメージを削除
+- コンテナが残っている場合は削除できない
+  - -f：コンテナごと削除可能
+- 以下のコマンドで確認
 
 ```bash
+$ sudo docker image ls
+```
+]
 
+---
+### コンテナの詳細を表示
+
+.zoom2[
+```bash
+$ sudo docker container inspect d11972fbee52
+[
+    {
+        "Id": "d11972fbee5201b13a03cf296f1ee0e58a5371a1780...",
+        "Created": "2019-10-29T06:27:33.043549168Z",
+        "Path": "/bin/sh",
+        "Args": [
+            "-c",
+            "/run.sh"
+        ],
+
+(途中略)
+
+    }
+]
+```
+]
+
+---
+### コンテナを停止
+
+.zoom2[
+```bash
+$ sudo docker container stop d11972fbee52
+d11972fbee52
 ```
 
----
-### 
+- コンテナIDまたはコンテナ名を指定して停止
+- 以下のコマンドで再実行
 
 ```bash
+$ sudo docker container start d11972fbee52
+d11972fbee52
+```
+]
 
+---
+### コンテナにアタッチ
+
+.zoom2[
+```bash
+// コンテナをバックグラウンドで実行
+$ sudo docker container run -itd --name ubuntu ubuntu:18.04
+18d9ca0f84c823960f81e769660b267e45c9176cbd1e3e28db915dfd6...
+
+$ sudo docker container attach ubuntu
+root@18d9ca0f84c8:/#
 ```
 
+- Ctrl-p + Ctrl-q：コンテナからデタッチ
+- Ctrl-c：コンテナの終了
+- exit でもコンテナが終了する
+]
 ---
-### 
+### コンテナ内でコマンド実行
 
+.zoom2[
 ```bash
+// コンテナを起動
+$ sudo docker container start ubuntu
+ubuntu
 
+$ sudo docker container exec -it ubuntu /bin/bash
+root@18d9ca0f84c8:/#
 ```
 
+- コンテナ内に存在するコマンドのみ
+- exit で終了するのは実行プロセス
+  - コンテナは終了しない
+]
+
 ---
-### 
+### その他
+
+- レジストリからイメージを検索
 
 ```bash
-
+$ sudo docker search [検索ワード]
 ```
 
----
-### 
+- Dockerに関するシステム情報を表示
 
 ```bash
-
+$ sudo docker info
 ```
 
 ---
 class: center, middle, blue
 ## Dockerfile
 
+---
+### Dockerfile？
+
+- Dockerイメージの基となるテキストファイル
+- イメージの作成に必要な全情報を含む
+  - ベースイメージ
+  - コピーするファイル
+  - 実行ユーザー
+  - ポート
+  - 実行コマンド  
+    etc...
+
+---
+### Dockerfileの作成
+
+.zoom2[
+```bash
+$ vi Dockerfile
+
+```
+]
 
 ---
 class: center, middle, blue
 ## 管理ツール
+
+---
+### Docker Compose
 
 ---
 ### 参考
