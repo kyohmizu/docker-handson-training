@@ -19,18 +19,18 @@
 1. サンプルアプリデプロイ(10分)
 1. オーケストレーション(20)
 
-## 1.Docker概要
+## Docker概要
 
 - コンテナ概要
 - Docker概要
 
-## 2.環境確認
+## 環境確認
 
 - Azure VM
 - Dockerサーバー、クライアント
 - `docker version`
 
-## 3.Dockerコマンド
+## Dockerコマンド
 
 - コマンド概要
 - コマンド説明
@@ -51,13 +51,14 @@
   - `docker image rm`
   - ``
 
-## 4.Dockerfile作成
+## Dockerfile作成
 
-## 5.サンプルアプリデプロイ
+## 管理ツール
 
-- wordpress？
-
-## 6.オーケストレーション
-
-- オーケストレーション概要
+- Docker Swarm
 - docker-compose
+
+## 検討事項
+
+- Dockerfileベストプラクティス
+- マルチステージビルド

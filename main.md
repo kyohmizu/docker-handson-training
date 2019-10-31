@@ -306,7 +306,7 @@ root@7bc89a31691b:/
 
 .zoom2[
 ```bash
-$ sudo docker container run -it -d -p 8092:80 \
+$ sudo docker container run -it -d -p 8080:80 \
 dockercloud/hello-world
 d11972fbee5201b13a03cf296f1ee0e58a5371a178083b69c913d6177365...
 ```
@@ -315,7 +315,10 @@ d11972fbee5201b13a03cf296f1ee0e58a5371a178083b69c913d6177365...
   - コンテナIDが出力される
 - -p：コンテナ内とホストのポートフォワード
   - ブラウザでアクセスしてみる  
-  http://[ホストのIPアドレス]:8092
+
+```txt
+  http://[ホストのIPアドレス]:8080
+```
 ]
 
 ---
@@ -332,7 +335,7 @@ $ sudo docker container ls
 CONTAINER ID     IMAGE                     COMMAND                CREATED    
 STATUS              PORTS                  NAMES
 d11972fbee52     dockercloud/hello-world   "/bin/sh -c /run.sh"   22 minutesago
-Up 29 minutes       0.0.0.0:8092->80/tcp   heuristic_hellman
+Up 29 minutes       0.0.0.0:8080->80/tcp   heuristic_hellman
 
 $ sudo docker container ls -a
 CONTAINER ID     IMAGE                     COMMAND                CREATED   
@@ -340,7 +343,7 @@ STATUS                      PORTS                  NAMES
 866926f90fec     hello-world               "/hello"               3 minutes ago
 Exited (0) 50 minutes ago                          nice_leakey
 d11972fbee52     dockercloud/hello-world   "/bin/sh -c /run.sh"   23 minutesago
-Up 23 minutes               0.0.0.0:8092->80/tcp   heuristic_hellman
+Up 23 minutes               0.0.0.0:8080->80/tcp   heuristic_hellman
 7bc89a31691b     ubuntu:18.04              "/bin/bash"            42 minutesago
 Exited (0) 32 minutes ago                          pedantic_hopper
 ```
@@ -448,6 +451,7 @@ $ sudo docker container attach ubuntu
 root@18d9ca0f84c8:/#
 ```
 
+- --name：コンテナ名を設定
 - Ctrl-p + Ctrl-q：コンテナからデタッチ
 - Ctrl-c：コンテナの終了
 - exit でもコンテナが終了する
@@ -502,12 +506,164 @@ class: center, middle, blue
     etc...
 
 ---
-### Dockerfileの作成
+### Dockerfileリファレンス
+
+.tmp[
+- FROM
+  - ベースイメージを指定
+]
+.tmp[
+- COPY
+  - ホストからコンテナ内にファイルをコピー
+]
+.tmp[
+- ADD
+  - ホストからコンテナ内にコピーして展開
+]
+.tmp[
+- RUN
+  - イメージビルド時に、コンテナ内でコマンドを実行
+]
+
+---
+### Dockerfileリファレンス
+
+.tmp[
+- CMD
+  - コンテナ内でコマンドを実行
+  - docker container run時に上書き可
+]
+.tmp[
+- ENTRYPOINT
+  - コンテナ内でコマンドを実行
+]
+.tmp[
+- WORKDIR
+  - 作業ディレクトリを変更
+]
+
+---
+### Dockerfileリファレンス
+
+.tmp[
+- ENV
+  - コンテナ内で環境変数を設定
+]
+.tmp[
+- USER
+  - ユーザーを切り替え
+]
+.tmp[
+- EXPOSE
+  - 指定したポートでリッスン
+]
+.tmp[
+- VOLUME
+  - ボリュームとして扱うディレクトリを指定
+]
+
+---
+### Dockerfileの作成①(centos)
 
 .zoom2[
 ```bash
-$ vi Dockerfile
+# ディレクトリを作成＆移動
+$ mkdir -p ~/docker/sample1
+$ cd ~/docker/sample1
 
+# Dockerfileを作成(出力結果を参考に)
+$ cat Dockerfile
+FROM centos:7.5.1804
+COPY test /sample/
+RUN echo "sample docker container created" > /sample/doc
+
+# コンテナにコピーするファイルを作成
+$ echo "test" > test
+$ ls
+Dockerfile  test
+```
+]
+
+---
+### Dockerfileの作成①(centos)
+
+.zoom2[
+```bash
+# イメージを作成
+# -f：Dockerfileを指定
+# -t：タグを設定
+$ sudo docker image build -f ./Dockerfile -t test .
+
+# コンテナを起動
+# --rm：コンテナの停止時にコンテナを削除
+$ sudo docker container run -it --rm test
+# コンテナ内にアクセスした状態になる(以下はコンテナ内)
+
+# ファイルを確認
+$ cat /sample/doc
+$ cat /sample/test
+```
+]
+
+---
+### Dockerfileの作成②(Web - httpd)
+
+.zoom2[
+```bash
+$ mkdir -p ~/docker/sample2
+$ cd ~/docker/sample2
+
+# Dockerfileを作成(出力結果を参考に)
+$ cat Dockerfile
+FROM centos:7.5.1804
+RUN yum install -y httpd iproute && yum clean all
+COPY index.html /var/www/html/
+RUN systemctl enable httpd
+CMD ["/sbin/init"]
+
+# ブラウザで表示するファイルを作成
+$ vi index.html
+$ ls
+Dockerfile  index.html
+```
+]
+
+---
+### Dockerfileの作成②(Web - httpd)
+
+.zoom2[
+```bash
+# イメージを作成
+$ sudo docker image build -f ./Dockerfile -t web-httpd:v1 .
+
+# コンテナを起動
+# --tmpfs：オンメモリのディレクトリを作成
+# --mount：ホストのディレクトリにバインド
+# --stop-signal：停止時のシグナルを設定
+$ sudo docker container run -itd --tmpfs /tmp --tmpfs /run \
+--mount type=bind,src=/sys/fs/cgroup,dst=/sys/fs/cgroup \
+--stop-signal SIGRTMIN+3 --name web01 -p 8080:80 \
+web-httpd:v1
+f1e764371f48e053fec5ba81ba52fce2c35eb2d7bbb5fdc995e4138e1...
+```
+]
+
+---
+### Dockerfileの作成②(Web - httpd)
+
+.zoom2[
+```bash
+# コンテナを確認
+$ sudo docker container ls
+
+# Webサービスにアクセス
+$ curl http://localhost:8080
+```
+
+ブラウザでアクセス
+
+```txt
+  http://[ホストのIPアドレス]:8080
 ```
 ]
 
