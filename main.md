@@ -565,11 +565,14 @@ class: center, middle, blue
 ---
 ### Dockerfileの作成①(centos)
 
+.zoom0[
+  <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample1/Dockerfile></u>
+]
+
 .zoom2[
 ```bash
 # ディレクトリを作成＆移動
-$ mkdir -p ~/docker/sample1
-$ cd ~/docker/sample1
+$ mkdir -p ~/docker/sample1; cd ~/docker/sample1
 
 # Dockerfileを作成(出力結果を参考に)
 $ cat Dockerfile
@@ -608,10 +611,13 @@ $ cat /sample/test
 ---
 ### Dockerfileの作成②(Web - httpd)
 
+.zoom0[
+  <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample2/Dockerfile></u>
+]
+
 .zoom2[
 ```bash
-$ mkdir -p ~/docker/sample2
-$ cd ~/docker/sample2
+$ mkdir -p ~/docker/sample2; cd ~/docker/sample2
 
 # Dockerfileを作成(出力結果を参考に)
 $ cat Dockerfile
@@ -664,6 +670,73 @@ $ curl http://localhost:8080
 
 ```txt
   http://[ホストのIPアドレス]:8080
+```
+]
+
+---
+### Dockerfileの作成③(postgreSQL)
+
+.zoom0[
+  <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample3/Dockerfile></u>
+]
+
+.zoom2[
+```bash
+$ mkdir -p ~/docker/sample3; cd ~/docker/sample3
+
+# Dockerfileを作成(上部リンクを参照)
+$ vi Dockerfile
+$ ls
+Dockerfile
+
+# イメージを作成
+$ sudo docker image build -f ./Dockerfile -t pg-test .
+
+# コンテナを起動
+# --P：コンテナのポートをホストに公開(公開ポートはランダム)
+$ sudo docker container run -d -P --rm --name pg-test pg-test
+```
+]
+
+---
+### Dockerfileの作成③(postgreSQL)
+
+.zoom2[
+```bash
+# ポートを確認
+$ sudo docker container ls pg-test
+CONTAINER ID   IMAGE       COMMAND                  CREATED    
+        STATUS              PORTS                     NAMES
+eb21a31e9755   pg-test     "/usr/lib/postgresql…"   43 seconds 
+ago     Up 38 seconds       0.0.0.0:32773->5432/tcp   pg-test
+
+# DBに接続
+# psql コマンドを使用するには、postgresql のインストールが必要
+# sudo apt install postgresql
+$ psql -h localhost -p 32773 -d docker -U docker --password
+```
+]
+
+---
+### Dockerfileの作成③(postgreSQL)
+
+.zoom2[
+```bash
+# DBに接続している状態
+# テーブルを作成
+$ CREATE TABLE cities (
+    name            varchar(80),
+    location        point
+);
+CREATE TABLE
+
+# データを挿入
+$ INSERT INTO cities VALUES 
+('San Francisco', '(-194.0, 53.0)');
+INSERT 0 1
+
+# データを確認
+$ SELECT * FROM cities;
 ```
 ]
 
