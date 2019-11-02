@@ -609,7 +609,7 @@ $ cat /sample/test
 ]
 
 ---
-### Dockerfileの作成②(Web - httpd)
+### Dockerfileの作成②(httpd)
 
 .zoom0[
   <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample2/Dockerfile></u>
@@ -635,7 +635,7 @@ Dockerfile  index.html
 ]
 
 ---
-### Dockerfileの作成②(Web - httpd)
+### Dockerfileの作成②(httpd)
 
 .zoom2[
 ```bash
@@ -655,7 +655,7 @@ f1e764371f48e053fec5ba81ba52fce2c35eb2d7bbb5fdc995e4138e1...
 ]
 
 ---
-### Dockerfileの作成②(Web - httpd)
+### Dockerfileの作成②(httpd)
 
 .zoom2[
 ```bash
@@ -737,6 +737,31 @@ INSERT 0 1
 
 # データを確認
 $ SELECT * FROM cities;
+```
+]
+
+---
+### Dockerfileの作成④(Web API)
+
+.zoom0[
+  <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample4/></u>
+]
+
+.zoom2[
+```bash
+# 上記リンクのサンプルプログラムを使用します
+$ cd go-api; ls
+go.mod  go.sum  main.go
+
+# Dockerfileを作成
+$ vi Dockerfile
+
+# イメージを作成
+$ sudo docker image build -f ./Dockerfile -t go-api .
+
+# コンテナを起動
+$ sudo docker container run -itd --rm \
+-p 9999:9999 --name go-api go-api
 ```
 ]
 
