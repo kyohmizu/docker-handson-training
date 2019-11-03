@@ -71,7 +71,7 @@ Azure仮想マシン(Ubuntu)でDockerを始めるには、以下を参考にし�
 
 .tmp[
 - git
-  - サンプルコードのインストールに便利  
+  - サンプルコードのインストール用  
     <u><https://git-scm.com/></u>
 ]
 .tmp[
@@ -741,7 +741,7 @@ $ SELECT * FROM cities;
 ]
 
 ---
-### Dockerfileの作成④(Web API)
+### Dockerfileの作成④(Web App)
 
 .zoom0[
   <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample4/></u>
@@ -753,24 +753,279 @@ $ SELECT * FROM cities;
 $ cd go-api; ls
 go.mod  go.sum  main.go
 
-# Dockerfileを作成
+# Dockerfileを作成(go-api)
 $ vi Dockerfile
 
 # イメージを作成
-$ sudo docker image build -f ./Dockerfile -t go-api .
+$ sudo docker image build -f ./Dockerfile -t todolist-go-api .
 
 # コンテナを起動
-$ sudo docker container run -itd --rm \
--p 9999:9999 --name go-api go-api
+$ sudo docker container run -itd --rm -p 9999:9999 \
+--name todolist-go-api todolist-go-api
+```
+]
+
+---
+### Dockerfileの作成④(Web App)
+
+.zoom2[
+```bash
+# コンテナを確認
+$ sudo docker container ls
+CONTAINER ID   IMAGE             COMMAND        CREATED
+STATUS          PORTS                    NAMES
+fa2b0cdc13ec   todolist-go-api   "./go-api"     31 seconds ago
+Up 30 seconds   0.0.0.0:9999->9999/tcp   todolist-go-api
+
+# APIにアクセス
+$ curl http://localhost:9999
+[{"id":1,"text":"勉強","done":false},{"id":2...}]
+```
+]
+
+---
+### Dockerfileの作成④(Web App)
+
+.zoom0[
+  <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample4/></u>
+]
+
+.zoom1[
+```bash
+# 上記リンクのサンプルプログラムを使用します
+$ cd vue; ls -A
+.browserslistrc  postcss.config.js  tsconfig.json  .env  package-lock.json  public
+.gitignore       package.json       src
+
+# 接続するAPIのURLを修正(http://ホストのIPアドレス:9999)
+# Dockerfileに ENV または ARG を設定しても良い
+$ vi .env
+
+# Dockerfileを作成(vue)
+$ vi Dockerfile
+
+# イメージを作成
+$ sudo docker image build -f ./Dockerfile -t todolist-vue .
+
+# コンテナを起動
+$ sudo docker container run -itd --rm -p 8080:8080 --name todolist-vue \
+todolist-vue
+```
+]
+
+---
+### Dockerfileの作成④(Web App)
+
+.zoom1[
+```bash
+# コンテナを確認
+$ sudo docker container ls
+CONTAINER ID    IMAGE             COMMAND                  CREATED       
+STATUS          PORTS                    NAMES
+464a804fa278    todolist-vue      "docker-entrypoint.s…"   6 seconds ago 
+Up 5 seconds    0.0.0.0:8080->8080/tcp   todolist-vue
+fa2b0cdc13ec    todolist-go-api   "./go-api"               10 minutes ago
+Up 10 minutes   0.0.0.0:9999->9999/tcp   todolist-go-api
+
+# ブラウザでアクセス(http://ホストのIPアドレス:8080)
+```
+
+<center><img src="vue.png" width=36%></center>
+
+]
+
+---
+### Dockerfileの作成④(Web App)
+
+.zoom2[
+```bash
+# コンテナを停止
+# --rm を付与したため、停止したコンテナは削除される
+$ sudo docker container stop todolist-go-api todolist-vue
+todolist-go-api
+todolist-vue
 ```
 ]
 
 ---
 class: center, middle, blue
-## 管理ツール
+## Dockerイメージの管理
+
+---
+### イメージの保管
+
+.tmp[
+- Docker Hub
+]
+
+.tmp[
+- Docker Trusted Registry
+  - Docker EE のサービス
+]
+
+- Managed Container Registry
+  - Azure
+  - GCP
+  - AWS  
+    etc...
+
+---
+### イメージの保管
+
+.color-red[
+- Docker Hub←
+]
+
+.tmp[
+- Docker Trusted Registry
+  - Docker EE のサービス
+]
+
+- Managed Container Registry
+  - Azure
+  - GCP
+  - AWS  
+    etc...
+
+---
+### リポジトリを作成
+
+.zoom1[
+ブラウザでDocker Hubにアクセス
+]
+
+<center><img src="dockerhub.png" width=80%></center>
+
+.zoom1[
+リポジトリを新規作成
+]
+
+<center><img src="dockerhub-rg.png" width=60%></center>
+
+---
+### リポジトリを作成
+
+.zoom1[
+空のリポジトリが作成される
+]
+
+<center><img src="dockerhub-rg2.png" width=80%></center>
+
+---
+### イメージをプッシュ
+
+.zoom1[
+```bash
+# イメージを確認
+$ sudo docker image ls | grep todolist-go-api
+todolist-go-api            latest     64daa7e68577    About an hour ago   812MB
+
+# イメージにタグを設定([Docker Hubアカウント]/[イメージ]:[タグ])
+$ sudo docker image tag todolist-go-api kyohmizu/todolist-go-api:v1
+
+# イメージを確認
+$ sudo docker image ls | grep todolist-go-api
+kyohmizu/todolist-go-api    v1        64daa7e68577   About an hour ago   812MB
+todolist-go-api             latest    64daa7e68577   About an hour ago   812MB
+
+# Docker Hubにログイン
+# アカウント、パスワードを入力
+$ sudo docker login
+
+# イメージをプッシュ
+$ sudo docker image push kyohmizu/todolist-go-api:v1
+```
+]
+
+---
+### イメージをプッシュ
+
+.zoom1[
+プッシュされたイメージを確認
+]
+
+<center><img src="dockerhub-rg3.png" width=75%></center>
+
+---
+### プッシュしたイメージを取得
+
+.zoom1[
+```bash
+# ローカルのイメージを削除
+$ sudo docker image rm todolist-go-api kyohmizu/todolist-go-api:v1
+
+# 削除されたことを確認
+$ sudo docker image ls | grep todolist-go-api
+
+# Docker Hubからイメージを取得
+$ sudo docker image pull kyohmizu/todolist-go-api:v1
+
+# 取得したイメージを確認
+$ sudo docker image ls | grep todolist-go-api
+```
+]
+
+---
+class: center, middle, blue
+## おまけ
+
+---
+### Dockerイメージのレイヤー構造
+
+.zoom2[
+Dockerfileの各ステップがレイヤーとして積み上がる
+
+.tmp[
+- レイヤーは少ない方が良い
+  - イメージのサイズを小さくするため
+  - RUNはできるだけ1つにまとめ、ステップ数を減らす
+]
+
+.tmp[
+- 変更の多いステップと変更の少ないステップは分ける
+  - ビルド時間の短縮のため
+  - 変更の少ないステップを先に記述することで、キャッシュを有効利用する
+]
+]
+
+---
+### マルチステージビルド
+
+Dockerfileを複数のステージに分ける
+
+.tmp[
+- ステージ間でファイルをコピー
+  - ステージに名前を設定可
+  - --from=[ステージ名] でコピー元を指定
+]
+
+- 最終成果物のイメージを軽量化
+  - 開発用と本番用のDockerfileを1つにできる
+
+---
+### マルチステージビルド
+
+.zoom0[
+<u><https://github.com/kyohmizu/sample-todolist-vue/blob/master/Dockerfile></u>
+]
+
+.zoom1[
+```bash
+# マルチステージのDockerfileでイメージをビルド
+$ sudo docker image build -t todolist-vue:multi-stage .
+
+# イメージを確認(サイズに注目)
+$ sudo docker image ls | grep todolist-vue
+todolist-vue      multi-stage     442d6b2f5912        11 minutes ago      21.9MB
+todolist-vue      latest          eaab8aa36b8e        2 hours ago         242MB
+
+```
+]
 
 ---
 ### Docker Compose
+
+複数のDockerコンテナを管理
 
 ---
 ### 参考
