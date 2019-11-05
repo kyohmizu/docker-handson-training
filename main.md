@@ -1,5 +1,5 @@
 class: center, middle, inverse
-## Dockerハンズオン
+## Dockerワークショップ
 
 ---
 exclude: true
@@ -23,13 +23,13 @@ exclude: true
 ---
 ### 対象者
 
-- Docker触ったことない人
-- コンテナって…？な人
+- コンテナについて知らない人
+- Dockerを触ったことがない人
 
 ---
 ### 今日のゴール
 
-- コンテナについて何となく理解する
+- Dockerの仕組みを何となく理解する
 - Dockerfileを書けるようになる
 - Dockerコマンドを使えるようになる
 
@@ -42,7 +42,8 @@ exclude: true
 1. ハンズオン
    1. Dockerの基本操作
    2. Dockerfile
-   3. 管理ツール
+   3. Dockerイメージの管理
+1. 補足
 
 ---
 class: center, middle, blue
@@ -967,7 +968,7 @@ $ sudo docker image ls | grep todolist-go-api
 
 ---
 class: center, middle, blue
-## おまけ
+## 補足
 
 ---
 ### Dockerイメージのレイヤー構造
@@ -986,6 +987,17 @@ Dockerfileの各ステップがレイヤーとして積み上がる
   - ビルド時間の短縮のため
   - 変更の少ないステップを先に記述することで、キャッシュを有効利用する
 ]
+]
+
+---
+### .dockerignoreファイル
+
+.zoom2[
+ビルド時のコンテキストから除外する対象を指定
+
+- 指定したファイル・ディレクトリはDockerデーモンに送信されない
+  - ビルドに不要なサイズの大きいファイル
+  - 機密性の高いファイル
 ]
 
 ---
@@ -1018,7 +1030,6 @@ $ sudo docker image build -t todolist-vue:multi-stage .
 $ sudo docker image ls | grep todolist-vue
 todolist-vue      multi-stage     442d6b2f5912        11 minutes ago      21.9MB
 todolist-vue      latest          eaab8aa36b8e        2 hours ago         242MB
-
 ```
 ]
 
