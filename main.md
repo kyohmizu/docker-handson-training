@@ -505,6 +505,7 @@ root@7c49c85cfbb0:/# (lsコマンドでtestfileを確認)
 ---
 ### その他
 
+.zoom2[
 - レジストリからイメージを検索
 
 ```bash
@@ -516,6 +517,13 @@ $ sudo docker search [検索ワード]
 ```bash
 $ sudo docker info
 ```
+
+- 使用されていないDockerイメージを一括削除
+
+```bash
+$ sudo docker image prune
+```
+]
 
 ---
 class: center, middle, blue
