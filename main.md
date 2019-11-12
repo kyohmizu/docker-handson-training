@@ -363,7 +363,7 @@ Exited (0) 32 minutes ago                          pedantic_hopper
 $ sudo docker container rm 866926f90fec
 866926f90fec
 
-// hello-worldイメージのコンテナをすべて削除
+# hello-worldイメージのコンテナをすべて削除
 $ sudo docker container ls -a | grep hello-world | \
 cut -d ' ' -f1 | sudo xargs docker container rm
 ```
@@ -444,7 +444,7 @@ d11972fbee52
 
 .zoom2[
 ```bash
-// コンテナをバックグラウンドで実行
+# コンテナをバックグラウンドで実行
 $ sudo docker container run -itd --name ubuntu ubuntu:18.04
 18d9ca0f84c823960f81e769660b267e45c9176cbd1e3e28db915dfd6...
 
@@ -457,12 +457,13 @@ root@18d9ca0f84c8:/#
 - Ctrl-c：コンテナの終了
 - exit でもコンテナが終了する
 ]
+
 ---
 ### コンテナ内でコマンド実行
 
 .zoom2[
 ```bash
-// コンテナを起動
+# コンテナを起動
 $ sudo docker container start ubuntu
 ubuntu
 
@@ -473,6 +474,32 @@ root@18d9ca0f84c8:/#
 - コンテナ内に存在するコマンドのみ
 - exit で終了するのは実行プロセス
   - コンテナは終了しない
+]
+
+---
+### コンテナからイメージを作成
+
+.zoom1[
+```bash
+# コンテナ内にファイルを作成
+$ sudo docker container exec -it ubuntu touch testfile
+
+# 作成したファイルを確認
+$ sudo docker container exec -it ubuntu ls | grep testfile
+bin   dev  home  lib64  mnt  proc  run   srv  testfile  usr
+
+# コンテナをイメージタグ ubuntu:test でイメージ化
+$ sudo docker container commit ubuntu ubuntu:myimage
+sha256:6fb13e48ad2d4d00acf0198903f9af5e15a1afb12343be9a8ce3e0182d52fa3c
+
+# 作成したイメージを確認
+$ sudo docker image ls | egrep 'ubuntu.*myimage'
+ubuntu            myimage         6fb13e48ad2d      About a minute ago   64.2MB
+
+# 作成したイメージからコンテナを作成
+$ sudo docker container run -it --name myubuntu ubuntu:myimage
+root@7c49c85cfbb0:/# (lsコマンドでtestfileを確認)
+```
 ]
 
 ---
@@ -968,7 +995,7 @@ $ sudo docker image ls | grep todolist-go-api
 
 ---
 class: center, middle, blue
-## 補足
+## Tips
 
 ---
 ### Dockerイメージのレイヤー構造
@@ -1036,12 +1063,54 @@ todolist-vue      latest          eaab8aa36b8e        2 hours ago         242MB
 ---
 ### Docker Compose
 
-複数のDockerコンテナを管理
+.zoom2[
+<u><https://docs.docker.com/compose/></u>
+]
+
+.tmp[
+- 複数のDockerコンテナをサービスとして管理
+  - コンテナをまとめて起動、停止できる
+  - 引数や環境変数、ビルド対象のディレクトリ等を記述 (IaC)
+]
+
+.tmp[
+- オーケストレーション機能
+  - セルフヒーリング
+  - スケール
+]
+
+---
+### Docker Compose
+
+.zoom0[
+<u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample4/docker-compose.yml></u>
+]
+
+.zoom1[
+```bash
+$ ls
+Dockerfiles  docker-compose.yml  go-api  vue
+
+# コンテナを作成＆実行
+$ docker-compose up -d
+
+# コンテナを確認
+$ docker-compose ps
+      Name                   Command              State           Ports
+--------------------------------------------------------------------------------
+sample4_go-api_1   ./go-api                       Up      0.0.0.0:9999->9999/tcp
+sample4_vue_1      docker-entrypoint.sh http-     Up      0.0.0.0:8080->8080/tcp
+
+# コンテナを停止＆削除
+$ docker-compose down
+```
+]
+
 
 ---
 ### 参考
 
-.zoom1[
+.zoom2[
 公式ドキュメント  
 <u><https://docs.docker.com/></u>
 
