@@ -26,24 +26,27 @@ exclude: true
 - コンテナについて知らない人
 - Dockerを触ったことがない人
 
+※アプリケーション開発者向けの内容となっています
+
 ---
 ### 今日のゴール
 
 - Dockerの仕組みを何となく理解する
 - Dockerfileを書けるようになる
 - Dockerコマンドを使えるようになる
+- Dockerを使用した開発環境の作成方法を知る
 
 ---
 ### アウトライン
 
 1. 事前準備
-1. コンテナの基本
-1. Docker概要
-1. ハンズオン
+2. コンテナの基本
+3. Docker概要
+4. ハンズオン
    1. Dockerの基本操作
    2. Dockerfile
    3. Dockerイメージの管理
-1. 補足
+5. Tips
 
 ---
 class: center, middle, blue
@@ -78,7 +81,7 @@ Azure仮想マシン(Ubuntu)でDockerを始めるには、以下を参考にし�
 .tmp[
 - ssh  
   - 仮想マシンに接続する場合は必須
-  - Git Bashも可
+  - gitをインストールしていればGit Bashで使用可
 ]
 - Docker Hubのアカウント作成  
   <u><https://hub.docker.com/></u>
@@ -325,7 +328,7 @@ d11972fbee5201b13a03cf296f1ee0e58a5371a178083b69c913d6177365...
 ---
 ### コンテナを作成＆実行
 
-<center><img src="hello-world.png" width=100%></center>
+<center><img src="hello-world.png" width=90%></center>
 
 ---
 ### コンテナの一覧を取得
