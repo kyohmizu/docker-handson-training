@@ -46,7 +46,7 @@ exclude: true
    1. Dockerの基本操作
    2. Dockerfile
    3. Dockerイメージの管理
-5. Tips
+5. 応用編
 
 ---
 class: center, middle, blue
@@ -157,9 +157,21 @@ class: center, middle, blue
 ]
 
 ---
+### Docker？
+
+- コンテナのデファクトスタンダード
+- オープンソースソフトウェア(OSS)
+  - GitHub上でソース管理されている
+- マルチプラットフォーム対応
+  - Linux、Mac、Windows、arm...
+
+<center><img src="https://www.docker.com/sites/default/files/d8/styles/role_icon/public/2019-07/horizontal-logo-monochromatic-white.png" width=70%></center>
+
+---
 ### Dockerの利点
 
 - コードで管理(Infrastructure as Code)
+  - Dockerfile
   - 誰でも環境を再現できる
   - Single Source of Truth
 - 可搬性が高い
@@ -167,6 +179,19 @@ class: center, middle, blue
 - 起動が高速
   - 開発効率を高める
   - CI/CDと相性が良い
+
+---
+### Dockerの利点
+
+- Immutable Infrastructure
+  - 環境の破棄、再作成を容易にする
+  - スケールや回復可能なシステムを実現
+  - 手動での変更は避けるべき
+- パブリックなイメージを利用可能
+  - 自分で一から用意する必要がない
+- ベンダーに依存しない
+- 様々なサービス上で展開できる
+  - Kubernetes や各マネージドサービス
 
 ---
 ### 用語
@@ -499,7 +524,7 @@ sha256:6fb13e48ad2d4d00acf0198903f9af5e15a1afb12343be9a8ce3e0182d52fa3c
 $ sudo docker image ls | egrep 'ubuntu.*myimage'
 ubuntu            myimage         6fb13e48ad2d      About a minute ago   64.2MB
 
-# 作成したイメージからコンテナを作成
+# 作成したイメージからコンテナを作成＆起動
 $ sudo docker container run -it --name myubuntu ubuntu:myimage
 root@7c49c85cfbb0:/# (lsコマンドでtestfileを確認)
 ```
@@ -599,6 +624,19 @@ class: center, middle, blue
 .tmp[
 - VOLUME
   - ボリュームとして扱うディレクトリを指定
+]
+
+---
+### ハンズオン
+
+サンプルソース  
+<u><https://github.com/kyohmizu/docker-handson-sample></u>
+
+.zoom11[
+```bash
+# サンプルのダウンロード
+$ git clone https://github.com/kyohmizu/docker-handson-sample.git
+```
 ]
 
 ---
@@ -1006,7 +1044,7 @@ $ sudo docker image ls | grep todolist-go-api
 
 ---
 class: center, middle, blue
-## Tips
+## 応用編
 
 ---
 ### Dockerイメージのレイヤー構造
@@ -1104,20 +1142,99 @@ $ ls
 Dockerfiles  docker-compose.yml  go-api  vue
 
 # コンテナを作成＆実行
-$ docker-compose up -d
+$ sudo docker-compose up -d
 
 # コンテナを確認
-$ docker-compose ps
+$ sudo docker-compose ps
       Name                   Command              State           Ports
 --------------------------------------------------------------------------------
 sample4_go-api_1   ./go-api                       Up      0.0.0.0:9999->9999/tcp
 sample4_vue_1      docker-entrypoint.sh http-     Up      0.0.0.0:8080->8080/tcp
 
 # コンテナを停止＆削除
-$ docker-compose down
+$ sudo docker-compose down
 ```
 ]
 
+---
+### Swarm Mode
+
+<u><https://docs.docker.com/engine/swarm/></u>
+
+- Docker製のコンテナオーケストレーション機能
+  - スケール
+  - コンテナをあるべき状態に更新する(Reconciliation)
+  - ホスト間のオーバーレイネットワーク構築
+  - 内部DNSサーバによるサービスディスカバリ
+  - ローリングアップデート
+  - ロードバランシング
+
+---
+### Swarm Mode
+
+.zoom11[
+- 複数のホストでクラスタを構成
+  - マネージャーノード
+  - ワーカーノード
+
+<center><img src="https://docs.docker.com/engine/swarm/images/swarm-diagram.png" width=85%></center>
+]
+
+---
+### Swarm Mode
+
+.zoom2[
+```bash
+# Swarmを初期化
+$ sudo docker swarm init --advertise-addr [ホストのIPアドレス]
+
+# Swarmがアクティブであることを確認
+$ sudo docker info | grep Swarm
+ Swarm: active
+
+# サービスを作成
+$ sudo docker service create --replicas 1 --name helloworld \
+alpine ping docker.com
+
+# 作成したサービスを確認
+$ sudo docker service ls
+```
+]
+
+---
+### コンテナを利用するAzureサービス
+
+.tmp[
+- Azure Kubernetes Service(AKS)
+  - マネージドなKubernetesサービス
+  - マスターノードの管理が不要
+  - マニフェストファイルを作成しソース管理する
+]
+
+.tmp[
+- Azure App Service
+  - クラウドアプリの実行環境
+  - ソースコード、コンテナ両方のデプロイに対応
+]
+
+---
+### コンテナを利用するAzureサービス
+
+.tmp[
+- Azure Container Instance(ACI)
+  - サーバーレスでコンテナを起動する
+]
+
+.tmp[
+- Azure Container Registry(ACR)
+  - コンテナレジストリ
+  - Docker他、OCI準拠のイメージを保管する
+]
+
+.tmp[
+- Azure Batch
+  - コンテナでタスクを実行、スケジューリング
+]
 
 ---
 ### 参考
