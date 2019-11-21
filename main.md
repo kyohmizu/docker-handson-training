@@ -25,15 +25,14 @@ exclude: true
 
 - コンテナについて知らない人
 - Dockerを触ったことがない人
-
-※アプリケーション開発者向けの内容となっています
+- Dockerをアプリケーション開発に使用したい人
 
 ---
 ### 今日のゴール
 
-- Dockerの仕組みを何となく理解する
-- Dockerfileを書けるようになる
+- Dockerの基本的な仕組みを理解する
 - Dockerコマンドを使えるようになる
+- Dockerfileを書けるようになる
 - Dockerを使用した開発環境の作成方法を知る
 
 ---
@@ -640,7 +639,7 @@ $ git clone https://github.com/kyohmizu/docker-handson-sample.git
 ]
 
 ---
-### Dockerfileの作成①(centos)
+### ①Dockerfileの作成(centos)
 
 .zoom0[
   <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample1/Dockerfile></u>
@@ -665,7 +664,7 @@ Dockerfile  test
 ]
 
 ---
-### Dockerfileの作成①(centos)
+### ①Dockerfileの作成(centos)
 
 .zoom2[
 ```bash
@@ -686,7 +685,7 @@ $ cat /sample/test
 ]
 
 ---
-### Dockerfileの作成②(httpd)
+### ②Dockerfileの作成(httpd)
 
 .zoom0[
   <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample2/Dockerfile></u>
@@ -712,7 +711,7 @@ Dockerfile  index.html
 ]
 
 ---
-### Dockerfileの作成②(httpd)
+### ②Dockerfileの作成(httpd)
 
 .zoom2[
 ```bash
@@ -732,7 +731,7 @@ f1e764371f48e053fec5ba81ba52fce2c35eb2d7bbb5fdc995e4138e1...
 ]
 
 ---
-### Dockerfileの作成②(httpd)
+### ②Dockerfileの作成(httpd)
 
 .zoom2[
 ```bash
@@ -751,7 +750,7 @@ $ curl http://localhost:8080
 ]
 
 ---
-### Dockerfileの作成③(postgreSQL)
+### ③Dockerfileの作成(postgreSQL)
 
 .zoom0[
   <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample3/Dockerfile></u>
@@ -776,7 +775,7 @@ $ sudo docker container run -d -P --rm --name pg-test pg-test
 ]
 
 ---
-### Dockerfileの作成③(postgreSQL)
+### ③Dockerfileの作成(postgreSQL)
 
 .zoom2[
 ```bash
@@ -795,7 +794,7 @@ $ psql -h localhost -p 32773 -d docker -U docker --password
 ]
 
 ---
-### Dockerfileの作成③(postgreSQL)
+### ③Dockerfileの作成(postgreSQL)
 
 .zoom2[
 ```bash
@@ -818,7 +817,7 @@ $ SELECT * FROM cities;
 ]
 
 ---
-### Dockerfileの作成④(Web App)
+### ④Dockerfileの作成(Web App)
 
 .zoom0[
   <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample4/></u>
@@ -843,7 +842,7 @@ $ sudo docker container run -itd --rm -p 9999:9999 \
 ]
 
 ---
-### Dockerfileの作成④(Web App)
+### ④Dockerfileの作成(Web App)
 
 .zoom2[
 ```bash
@@ -861,7 +860,7 @@ $ curl http://localhost:9999
 ]
 
 ---
-### Dockerfileの作成④(Web App)
+### ④Dockerfileの作成(Web App)
 
 .zoom0[
   <u><https://github.com/kyohmizu/docker-handson-sample/blob/master/sample4/></u>
@@ -891,7 +890,7 @@ todolist-vue
 ]
 
 ---
-### Dockerfileの作成④(Web App)
+### ④Dockerfileの作成(Web App)
 
 .zoom1[
 ```bash
@@ -912,7 +911,27 @@ Up 10 minutes   0.0.0.0:9999->9999/tcp   todolist-go-api
 ]
 
 ---
-### Dockerfileの作成④(Web App)
+### 参考：コンテナ内でデバッグ実行
+
+.zoom2[
+```bash
+# デバッグ用のvueコンテナを起動
+$ sudo docker container run --rm -it -p 8080:8080 --name \
+vue-dev -v $(pwd)/src/:/app/src/ todolist-vue npm run serve
+
+# ブラウザでアクセス(http://localhost:8080)
+
+# 別のターミナルからコードを修正
+$ vi src/views/About.vue
+
+# 修正を保存するとリアルタイムで更新される
+```
+
+※dev環境の設定次第では正しく動作しない可能性があります
+]
+
+---
+### 環境のクリーンアップ
 
 .zoom2[
 ```bash
@@ -921,6 +940,12 @@ Up 10 minutes   0.0.0.0:9999->9999/tcp   todolist-go-api
 $ sudo docker container stop todolist-go-api todolist-vue
 todolist-go-api
 todolist-vue
+
+# 全ての実行コンテナを停止
+$ sudo docker container ls | sudo xargs docker container stop -
+
+# 未使用のコンテナを削除
+$ sudo docker container prune
 ```
 ]
 
@@ -1177,7 +1202,24 @@ $ sudo docker-compose down
   - マネージャーノード
   - ワーカーノード
 
-<center><img src="https://docs.docker.com/engine/swarm/images/swarm-diagram.png" width=85%></center>
+<center><img src="https://docs.docker.com/engine/swarm/images/swarm-diagram.png" width=75%></center>
+]
+
+.zoom0-r[
+  <u><https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/></u>
+]
+
+---
+### Swarm Mode
+
+.zoom11[
+- 1サービスの中で複数のタスクを展開
+
+<center><img src="https://docs.docker.com/engine/swarm/images/services-diagram.png" width=65%></center>
+]
+
+.zoom0-r[
+  <u><https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/></u>
 ]
 
 ---
@@ -1237,7 +1279,7 @@ $ sudo docker service ls
 ]
 
 ---
-### 参考
+### 参考リンク
 
 .zoom2[
 公式ドキュメント  
@@ -1251,6 +1293,28 @@ Dockerコマンドリファレンス
 
 Docker pull commit push Dockerfile WordPress環境をつくる
 <u><https://qiita.com/cyberblack28/items/7ed6fbc75503bf9418b3></u>
+]
+
+---
+### おすすめ書籍
+
+.half-3[
+<center><img src="https://www.shoeisha.co.jp/static/splus/36/book/image/9784798153223.jpg" width=40%></center>
+]
+
+.zoom0-r[
+  <u><https://www.shoeisha.co.jp/book/detail/9784798153223/></u>
+]
+
+---
+### おすすめ書籍
+
+.half-3[
+<center><img src="https://img.ips.co.jp/ij/18/1118101052/1118101052-520x.jpg" width=40%></center>
+]
+
+.zoom0-r[
+  <u><https://book.impress.co.jp/books/1118101052/></u>
 ]
 
 ---
