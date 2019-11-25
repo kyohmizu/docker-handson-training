@@ -588,7 +588,6 @@ func main() {
   fmt.Println("Golang Sample")
 }
 ```
-
 ]
 
 ---
@@ -611,6 +610,13 @@ $ sudo docker container run -it -v $(pwd):/tmp ubuntu:18.04
 # ビルド対象は /go/src/[パッケージ] ディレクトリを検索している
 $ go build -o [出力パス] [パッケージ]
 ```
+]
+
+---
+### 回答例
+
+.zoom1[
+<u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers.md></u>
 ]
 
 ---
@@ -876,6 +882,9 @@ INSERT 0 1
 $ SELECT * FROM cities;
 ```
 ]
+
+---
+### 課題3
 
 ---
 ### ④Dockerfileの作成(Web App)
