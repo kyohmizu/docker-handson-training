@@ -615,8 +615,8 @@ $ go build -o [出力パス] [パッケージ]
 ---
 ### 回答例
 
-.zoom1[
-<u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers.md></u>
+.zoom11[
+<u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers/answers-command.md></u>
 ]
 
 ---
@@ -865,8 +865,8 @@ rtt min/avg/max/mdev = 1.771/1.905/2.098/0.135 ms
 ---
 ### 回答例
 
-.zoom1[
-<u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers.md></u>
+.zoom11[
+<u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers/answers-dockerfile.md></u>
 ]
 
 ---
