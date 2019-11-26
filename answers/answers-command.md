@@ -4,8 +4,7 @@
 
 ```bash
 # ①
-$ sudo docker container run -itd --rm --name hw-demo -p 9999:80 \
-dockercloud/hello-world
+$ sudo docker container run -itd --rm --name hw-demo -p 9999:80 dockercloud/hello-world
 
 # ②
 $ sudo docker container ls | grep hw-demo
@@ -32,8 +31,7 @@ func main() {
 $ ls
 main.go
 
-$ sudo docker container run -it -v $(pwd):/go/src/sample-go \
-golang:alpine go build -o /go/src/sample-go sample-go
+$ sudo docker container run -it -v $(pwd):/go/src/sample-go golang:alpine go build -o /go/src/sample-go sample-go
 
 $ ls
 main.go  sample-go

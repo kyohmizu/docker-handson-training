@@ -817,6 +817,59 @@ $ curl http://localhost:8080
 ]
 
 ---
+### 課題3
+
+.zoom11[
+以下のDockerfileを正しく動作するように修正してください。
+
+- TARGETPATH には /test/ を設定
+
+```Dockerfile
+FROM alpine
+
+RUN apt install -y iputils-ping
+
+COPY ./text ${TARGETPATH}
+
+CMD ["sh", "-c", "echo TARGETPATH=${TARGETPATH}; ping -c 4 8.8.8.8;→
+ tree ${TARGETPATH}"]
+```
+]
+
+---
+### 課題3
+
+.zoom11[
+```bash
+# 実行結果
+$ sudo docker container run -it --rm test
+TARGETPATH=/test/
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=52 time=2.09 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=52 time=1.81 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=52 time=1.94 ms
+64 bytes from 8.8.8.8: icmp_seq=4 ttl=52 time=1.77 ms
+
+--- 8.8.8.8 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3005ms
+rtt min/avg/max/mdev = 1.771/1.905/2.098/0.135 ms
+/test/
+|-- Dockerfile
+|-- Dockerfile2
+`-- text
+
+0 directories, 3 files
+```
+]
+
+---
+### 回答例
+
+.zoom1[
+<u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers.md></u>
+]
+
+---
 ### ③Dockerfileの作成(postgreSQL)
 
 .zoom0[
@@ -882,9 +935,6 @@ INSERT 0 1
 $ SELECT * FROM cities;
 ```
 ]
-
----
-### 課題3
 
 ---
 ### ④Dockerfileの作成(Web App)
