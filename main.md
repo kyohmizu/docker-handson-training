@@ -615,7 +615,7 @@ $ go build -o [出力パス] [パッケージ]
 ---
 ### 回答例
 
-.zoom11[
+.zoom2[
 <u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers/answers-command.md></u>
 ]
 
@@ -638,58 +638,98 @@ class: center, middle, blue
 ---
 ### Dockerfileリファレンス
 
-.tmp[
+.zoom1[
 - FROM
   - ベースイメージを指定
-]
-.tmp[
+
+```Dockerfile
+FROM ubuntu:18.04
+```
+
 - COPY
   - ホストからコンテナ内にファイルをコピー
-]
-.tmp[
+
+```Dockerfile
+COPY . /app # ホストのカレントディレクトリからコンテナの /app にコピー
+```
+
 - ADD
   - ホストからコンテナ内にコピーして展開
+
+```Dockerfile
+ADD ./test.tar /app # test.tar を /app にコピーして展開
+```
 ]
-.tmp[
+
+---
+### Dockerfileリファレンス
+
+.zoom1[
 - RUN
   - イメージビルド時に、コンテナ内でコマンドを実行
+
+```Dockerfile
+RUN go build
+```
+
+- CMD
+  - コンテナ内でコマンドを実行 (docker container run時に上書き可)
+
+```Dockerfile
+CMD ["echo", "test"]
+```
+
+- ENTRYPOINT
+  - コンテナ内でコマンドを実行 (CMDと併用することも多い)
+
+```Dockerfile
+ENTRYPOINT ["echo", "test"]
+```
 ]
 
 ---
 ### Dockerfileリファレンス
 
-.tmp[
-- CMD
-  - コンテナ内でコマンドを実行
-  - docker container run時に上書き可
-]
-.tmp[
-- ENTRYPOINT
-  - コンテナ内でコマンドを実行
-]
-.tmp[
+.zoom1[
 - WORKDIR
   - 作業ディレクトリを変更
+
+```Dockerfile
+WORKDIR /app # 以降 /app が作業ディレクトリとなる
+```
+
+- ENV
+  - コンテナ内で環境変数を設定
+
+```Dockerfile
+ENV VALUE1=test
+```
+
+- USER
+  - ユーザーを切り替え
+
+```Dockerfile
+USER testuser
+```
 ]
 
 ---
 ### Dockerfileリファレンス
 
-.tmp[
-- ENV
-  - コンテナ内で環境変数を設定
-]
-.tmp[
-- USER
-  - ユーザーを切り替え
-]
-.tmp[
+.zoom1[
 - EXPOSE
   - 指定したポートでリッスン
-]
-.tmp[
+
+```Dockerfile
+EXPOSE 8080
+```
+
 - VOLUME
   - ボリュームとして扱うディレクトリを指定
+
+```Dockerfile
+VOLUME ["/tmp/foo"]
+```
 ]
 
 ---
@@ -821,18 +861,28 @@ $ curl http://localhost:8080
 
 .zoom11[
 以下のDockerfileを正しく動作するように修正してください。
+]
 
-- TARGETPATH には /test/ を設定
+.zoom0[
+<u><https://github.com/kyohmizu/docker-handson-sample/blob/master/task3/Dockerfile></u>
+]
 
+.zoom11[
 ```Dockerfile
 FROM alpine
 
 RUN apt install -y iputils-ping
 
+# TARGETPATH には初期値として /test/ を設定したい
 COPY ./text ${TARGETPATH}
 
 CMD ["sh", "-c", "echo TARGETPATH=${TARGETPATH}; ping -c 4 8.8.8.8;→
  tree ${TARGETPATH}"]
+```
+
+```bash
+# イメージビルド
+$ sudo docker image build -t test .
 ```
 ]
 
@@ -865,7 +915,7 @@ rtt min/avg/max/mdev = 1.771/1.905/2.098/0.135 ms
 ---
 ### 回答例
 
-.zoom11[
+.zoom2[
 <u><https://github.com/kyohmizu/docker-handson-training/blob/master/answers/answers-dockerfile.md></u>
 ]
 
@@ -1194,7 +1244,7 @@ class: center, middle, blue
 ---
 ### Dockerイメージのレイヤー構造
 
-.zoom2[
+.zoom11[
 Dockerfileの各ステップがレイヤーとして積み上がる
 
 .tmp[
@@ -1202,6 +1252,8 @@ Dockerfileの各ステップがレイヤーとして積み上がる
   - イメージのサイズを小さくするため
   - RUNはできるだけ1つにまとめ、ステップ数を減らす
 ]
+
+- 再ビルド時、変更のないステップはキャッシュが利用される
 
 .tmp[
 - 変更の多いステップと変更の少ないステップは分ける
@@ -1272,6 +1324,27 @@ todolist-vue      latest          eaab8aa36b8e        2 hours ago         242MB
 - オーケストレーション機能
   - セルフヒーリング
   - スケール
+]
+
+---
+### Docker Compose
+
+.zoom2[
+  インストール：
+]
+
+.zoom1[
+```bash
+# URLからバイナリを取得
+$ sudo curl -L "https://github.com/docker/compose/releases/download/→
+1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# バイナリに実行権を追加
+$ sudo chmod +x /usr/local/bin/docker-compose
+
+# インストールの確認
+$ docker-compose version
+```
 ]
 
 ---
@@ -1401,15 +1474,18 @@ $ sudo docker service ls
 ---
 ### 参考リンク
 
-.zoom2[
+.zoom11[
 公式ドキュメント  
 <u><https://docs.docker.com/></u>
+
+Dockerコマンドリファレンス  
+<u><https://docs.docker.com/engine/reference/commandline/docker/></u>
 
 Dockerドキュメント日本語化プロジェクト  
 <u><http://docs.docker.jp/v1.12/index.html></u>
 
-Dockerコマンドリファレンス  
-<u><https://docs.docker.com/engine/reference/commandline/docker/></u>
+Dockerfile のベストプラクティス  
+<u><http://docs.docker.jp/engine/articles/dockerfile_best-practice.html></u>
 
 Docker pull commit push Dockerfile WordPress環境をつくる
 <u><https://qiita.com/cyberblack28/items/7ed6fbc75503bf9418b3></u>
