@@ -524,7 +524,8 @@ $ sudo docker image ls | egrep 'ubuntu.*myimage'
 ubuntu            myimage         6fb13e48ad2d      About a minute ago   64.2MB
 
 # 作成したイメージからコンテナを作成＆起動
-$ sudo docker container run -it --name myubuntu ubuntu:myimage
+# --rm：コンテナの停止時にコンテナを削除
+$ sudo docker container run -it --rm --name myubuntu ubuntu:myimage
 root@7c49c85cfbb0:/# (lsコマンドでtestfileを確認)
 ```
 ]
@@ -788,7 +789,6 @@ Dockerfile  test
 $ sudo docker image build -f ./Dockerfile -t test .
 
 # コンテナを起動
-# --rm：コンテナの停止時にコンテナを削除
 $ sudo docker container run -it --rm test
 # コンテナ内にアクセスした状態になる(以下はコンテナ内)
 
@@ -1119,7 +1119,7 @@ todolist-go-api
 todolist-vue
 
 # 全ての実行コンテナを停止
-$ sudo docker container ls | sudo xargs docker container stop -
+$ sudo docker container ls | sudo xargs docker container stop
 
 # 未使用のコンテナを削除
 $ sudo docker container prune
