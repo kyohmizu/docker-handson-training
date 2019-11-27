@@ -636,7 +636,7 @@ class: center, middle, blue
     etc...
 
 ---
-### Dockerfileリファレンス
+### Dockerfile 命令リファレンス
 
 .zoom1[
 - FROM
@@ -662,7 +662,7 @@ ADD ./test.tar /app # test.tar を /app にコピーして展開
 ]
 
 ---
-### Dockerfileリファレンス
+### Dockerfile 命令リファレンス
 
 .zoom1[
 - RUN
@@ -688,7 +688,7 @@ ENTRYPOINT ["echo", "test"]
 ]
 
 ---
-### Dockerfileリファレンス
+### Dockerfile 命令リファレンス
 
 .zoom1[
 - WORKDIR
@@ -699,24 +699,31 @@ WORKDIR /app # 以降 /app が作業ディレクトリとなる
 ```
 
 - ENV
-  - コンテナ内で環境変数を設定
+  - ビルド時とコンテナ内で使用する環境変数を設定
 
 ```Dockerfile
-ENV VALUE1=test
+ENV VALUE1=test # [変数名]=[値]
 ```
 
+- ARG
+  - ビルド時に使用する変数を設定
+
+```Dockerfile
+ARG VALUE2=test
+```
+]
+
+---
+### Dockerfile 命令リファレンス
+
+.zoom1[
 - USER
   - ユーザーを切り替え
 
 ```Dockerfile
 USER testuser
 ```
-]
 
----
-### Dockerfileリファレンス
-
-.zoom1[
 - EXPOSE
   - 指定したポートでリッスン
 
@@ -1435,6 +1442,40 @@ alpine ping docker.com
 $ sudo docker service ls
 ```
 ]
+
+---
+### BuildKit
+
+.zoom2[
+イメージを効率的にビルドするツールキット
+
+- Docker v18.09 からサポート
+- 使用していないビルドステージをスキップ
+- 独立したステージのビルドを並列実行
+- 不要なファイルをビルドコンテキストに送らない  
+  etc...
+
+```bash
+# ビルド前に変数を設定する
+$ export DOCKER_BUILDKIT=1
+$ sudo docker image build .
+```
+]
+
+---
+### Windowsでのコンテナ利用
+
+.half[
+- Docker Desktop for Windows
+  - 仮想マシン上でコンテナ実行を実行
+  - Hyper-Vを使用  
+  <u><https://docs.docker.com/docker-for-windows/></u>
+]
+
+- Docker Toolbox(非推奨)
+  - レガシーなDockerデスクトッププログラム
+  - Oracle VM VirtualBoxを使用  
+  <u><https://docs.docker.com/toolbox/></u>
 
 ---
 ### コンテナを利用するAzureサービス
