@@ -878,10 +878,10 @@ $ curl http://localhost:8080
 ```Dockerfile
 FROM alpine
 
-RUN apt install -y iputils-ping
+RUN apt-get install -y iputils-ping
 
 # TARGETPATH には初期値として /test/ を設定したい
-COPY ./text ${TARGETPATH}
+COPY . ${TARGETPATH}
 
 CMD ["sh", "-c", "echo TARGETPATH=${TARGETPATH}; ping -c 4 8.8.8.8;→
  tree ${TARGETPATH}"]
@@ -1231,7 +1231,7 @@ $ sudo docker image push kyohmizu/todolist-go-api:v1
 .zoom1[
 ```bash
 # ローカルのイメージを削除
-$ sudo docker image rm todolist-go-api kyohmizu/todolist-go-api:v1
+$ sudo docker image rm -f todolist-go-api kyohmizu/todolist-go-api:v1
 
 # 削除されたことを確認
 $ sudo docker image ls | grep todolist-go-api
