@@ -240,6 +240,16 @@ class: center, middle, blue
 ]
 
 ---
+### 参考
+
+.zoom1[
+「Kubernetes による Cloud Native な開発」と「VM 時代の開発」([@amsy810](https://twitter.com/amsy810))  
+<u><https://speakerdeck.com/masayaaoyama/jtf2019-k8s-amsy810></u>
+]
+
+<center><img src="amsy.png" width=80%></center>
+
+---
 class: center, middle, blue
 ## Dockerの基本操作
 
@@ -260,7 +270,7 @@ $ sudo docker [サブコマンド] [オプション] [ターゲット]
   etc...
 
 ---
-### イメージをレジストリから取得
+#### イメージをレジストリから取得 (image pull)
 
 ```bash
 $ sudo docker image pull hello-world
@@ -276,7 +286,7 @@ docker.io/library/hello-world:latest
 - タグを指定する場合は イメージ名:タグ名
 
 ---
-### イメージの一覧を取得
+#### イメージの一覧を取得 (image ls)
 
 ```bash
 $ sudo docker image ls
@@ -289,7 +299,7 @@ hello-world                                       latest
 - リポジトリとタグで一意に表される
 
 ---
-### コンテナを作成＆実行
+#### コンテナを作成＆実行 (container run)
 
 .zoom2[
 ```bash
@@ -309,7 +319,7 @@ be working correctly.
 ]
 
 ---
-### コンテナを作成＆実行
+#### コンテナを作成＆実行 (container run)
 
 .zoom2[
 ```bash
@@ -330,7 +340,7 @@ root@7bc89a31691b:/
 ]
 
 ---
-### コンテナを作成＆実行
+#### コンテナを作成＆実行 (container run)
 
 .zoom2[
 ```bash
@@ -350,12 +360,12 @@ d11972fbee5201b13a03cf296f1ee0e58a5371a178083b69c913d6177365...
 ]
 
 ---
-### ブラウザで表示
+#### ブラウザで表示
 
 <center><img src="hello-world.png" width=90%></center>
 
 ---
-### コンテナの一覧を取得
+#### コンテナの一覧を取得 (container ls)
 
 .zoom1[
 ```bash
@@ -383,7 +393,7 @@ Exited (0) 32 minutes ago                          pedantic_hopper
 ]
 
 ---
-### コンテナを削除
+#### コンテナを削除 (container rm)
 
 .zoom2[
 ```bash
@@ -404,7 +414,7 @@ $ sudo docker container ls -a
 ]
 
 ---
-### イメージを削除
+#### イメージを削除 (image rm)
 
 .zoom2[
 ```bash
@@ -426,7 +436,7 @@ $ sudo docker image ls
 ]
 
 ---
-### コンテナの詳細を表示
+#### コンテナの詳細を表示 (container inspect)
 
 .zoom2[
 ```bash
@@ -449,7 +459,7 @@ $ sudo docker container inspect d11972fbee52
 ]
 
 ---
-### コンテナを停止
+#### コンテナを停止 (container stop)
 
 .zoom2[
 ```bash
@@ -467,7 +477,7 @@ d11972fbee52
 ]
 
 ---
-### コンテナにアタッチ
+#### コンテナにアタッチ (container attach)
 
 .zoom2[
 ```bash
@@ -486,7 +496,7 @@ root@18d9ca0f84c8:/#
 ]
 
 ---
-### コンテナ内でコマンド実行
+#### コンテナ内でコマンド実行 (container exec)
 
 .zoom2[
 ```bash
@@ -504,7 +514,7 @@ root@18d9ca0f84c8:/#
 ]
 
 ---
-### コンテナからイメージを作成
+#### コンテナからイメージ作成 (container commit)
 
 .zoom1[
 ```bash
@@ -531,7 +541,7 @@ root@7c49c85cfbb0:/# (lsコマンドでtestfileを確認)
 ]
 
 ---
-### その他
+#### その他
 
 .zoom2[
 - レジストリからイメージを検索
