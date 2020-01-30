@@ -1,4 +1,6 @@
-class: center, middle, inverse
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## Dockerワークショップ
 
 ---
@@ -48,7 +50,9 @@ exclude: true
 5. 応用編
 
 ---
-class: center, middle, blue
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## 事前準備
 
 ---
@@ -86,7 +90,9 @@ Azure仮想マシン(Ubuntu)でDockerを始めるには、以下を参考にし�
   <u><https://hub.docker.com/></u>
 
 ---
-class: center, middle, blue
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## コンテナの基本
 
 ---
@@ -141,7 +147,9 @@ class: center, middle, blue
   - リソースの使用量を制限
 
 ---
-class: center, middle, blue
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## Docker概要
 
 ---
@@ -250,7 +258,9 @@ class: center, middle, blue
 <center><img src="amsy.png" width=80%></center>
 
 ---
-class: center, middle, blue
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## Dockerの基本操作
 
 ---
@@ -631,7 +641,9 @@ $ go build -o [出力パス] [パッケージ]
 ]
 
 ---
-class: center, middle, blue
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## Dockerfile
 
 ---
@@ -1137,7 +1149,9 @@ $ sudo docker container prune
 ]
 
 ---
-class: center, middle, blue
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## Dockerイメージの管理
 
 ---
@@ -1255,7 +1269,9 @@ $ sudo docker image ls | grep todolist-go-api
 ]
 
 ---
-class: center, middle, blue
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
 ## 応用編
 
 ---
@@ -1565,5 +1581,7 @@ Docker pull commit push Dockerfile WordPress環境をつくる
 ]
 
 ---
-class: center, middle, blue
-# おわり
+background-image: url(https://raw.githubusercontent.com/kyohmizu/items-for-presentation/master/bg-12.jpg)
+background-size: cover
+class: middle, blue
+## おわり
